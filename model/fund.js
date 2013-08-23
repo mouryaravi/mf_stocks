@@ -10,7 +10,7 @@ Fund.prototype.getStocks = function() {
   console.log('Location for fund', this.fund, "is", loc);
   var htmlPage = new HtmlPage(loc);
   htmlPage.parse(function() {
-    htmlPage.totalPerc();    
+    console.log("Total percentage:", htmlPage.totalPerc());    
   });
   return ['super', 'duper'];
 }

@@ -1,5 +1,8 @@
 var jsdom = require('jsdom'),
-  url = require('url');
+  url = require('url'),
+  _ = require('underscore'),
+  Stock = require('./stock'),
+  _s = require('underscore.string');
 
 function HtmlPage(httpUrl) {
   this.httpUrl = url.parse(httpUrl);
@@ -12,7 +15,7 @@ HtmlPage.prototype.parse = function(callback) {
   console.log("")
   jsdom.env({
     url: that.httpUrl.href,
-    scripts : ['http://code.jquery.com/jquery.js'],
+    scripts : ['http://localhost:3000/jquery.min.js'],
     done: function(errors, window) {
       if (errors) {
         console.log('Error while loading page:', url, errors);
@@ -22,24 +25,41 @@ HtmlPage.prototype.parse = function(callback) {
       var $ = window.$;
       var tbl = $('table.tblporhd tr').get().map(function(row) {
         return $(row).find('td').get().map(function(cell) {
-          return $(cell).html();
+          var cellHtml = $(cell).html();
+          if (_s.startsWith(cellHtml, '<')) {
+            return $(cellHtml).html();
+          }
+          return cellHtml;
         });
       });
       console.log("Table: ", tbl);
-      that.stocks = tbl;
+      parseStocks(tbl);
       callback();
     }
   });
+
+  function parseStocks(tableJson) {
+    that.stocks = _.map(tableJson, function(stockArray) {
+      if (stockArray.length == 0) {
+        return null;
+      }
+      var stock = new Stock();
+      stock.buildFromArray(stockArray);
+      return stock;
+    });
+    that.stocks = _.compact(that.stocks);
+  }
 };
+
 
 HtmlPage.prototype.totalPerc = function() {
   var idx = 0, idx2 = 0;
   var perc = 0;
   for (idx = 0; idx < this.stocks.length; idx++) {
     var stock = this.stocks[idx];
-    perc += parseFloat(stock[4]) || 0.0;
+    perc += parseFloat(stock.percentage) || 0.0;
   }
-  console.log("Total perc:", perc, " ");
+  return perc;
 };
 
 module.exports = exports = HtmlPage;
