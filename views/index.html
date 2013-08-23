@@ -1,0 +1,13 @@
+<html>
+  <title>MF Stock consolidator</title>
+  <body>
+    <div class="container"> 
+      <form action="/getStocks" method="POST">
+        {% for fund in funds %}
+          <input type="radio" name="fund" value="{{fund}}">{{fund}}</input>
+        {% endfor %}
+        <input type="Submit" value="Get stocks" />
+      </form>
+    </div>
+  </body>
+</html>
