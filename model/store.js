@@ -23,8 +23,10 @@ module.exports.findStocksForFunds = function(fundsArray, callback) {
     if (err) throw err;
     console.log("Total stocks:", results.length);
     results = filterFunds(results);
+    results = sortStocks(results);
     callback(results);
   });
+
   function filterFunds(stocksArray) {
     return _.map(stocksArray, function(stock) {
       console.log("Total funds for stock: ", stock.name, ": ", stock.funds.length);
@@ -36,6 +38,16 @@ module.exports.findStocksForFunds = function(fundsArray, callback) {
       console.log("Funds for stock:", JSON.stringify(stock));
       return stock;
     });
+  }
+
+  function sortStocks(stocksArray) {
+    return _.sortBy(stocksArray, function(stock) {
+      var totalPerc = 0.0;
+      _.each(fundsArray, function(fund) {
+        totalPerc += parseFloat(stock[fund] || "0.0");
+      });
+      return totalPerc;
+    }).reverse();
   }
 
 };

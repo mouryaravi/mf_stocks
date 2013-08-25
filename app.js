@@ -29,7 +29,7 @@ app.get("/stocks", function(req, res) {
   var selectedFunds = [].concat(req.query.fund);
   console.log("Selected funds:", selectedFunds);
   store.findStocksForFunds(selectedFunds, function(stocks) {
-    res.render('stocks', {stocks: stocks, selectedFunds1: selectedFunds, selectedFunds2: selectedFunds});
+    res.render('stocks', {stocks: stocks, selectedFunds: selectedFunds});
   });
 });
 
