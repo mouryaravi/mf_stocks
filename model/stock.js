@@ -1,4 +1,5 @@
-var _ = require('underscore');
+var _ = require('underscore'),
+  store = require('./store');
 
 function Stock() {
   this.name = '';
@@ -11,5 +12,9 @@ Stock.prototype.buildFromArray = function(stockArray) {
   this.percentage = _.last(stockArray);
 };
 
+Stock.prototype.addFund = function(fundName) {
+  store.addFundsForStock(this, fundName);
+};
 
 module.exports = exports = Stock;
+

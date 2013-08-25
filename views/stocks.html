@@ -1,12 +1,14 @@
-<html>
-  <title>MF Stock consolidator</title>
-  <body>
-    <div class="container"> 
-      <ul class="stocks">
-        {% for stock in stocks %}
-          <li>{{stock}}</li>
-        {% endfor %}
-      </ul>
-    </div>
-  </body>
-</html>
+html
+  title MF Stock Consolidator
+  body
+    div(class="container")
+      table(name="stocksTable")
+        tr
+          th Stock
+          - for (var fund in selectedFunds1)
+            th= selectedFunds1[fund]
+        - for (var idx = 0; idx < stocks.length; idx++)
+          tr
+            td= stocks[idx].name
+            - for (var idx2 = 0; idx2 < selectedFunds2.length; idx2++)
+              td= stocks[idx][selectedFunds2[idx2]]
