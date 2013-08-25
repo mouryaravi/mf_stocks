@@ -21,7 +21,6 @@ module.exports.findStocksForFunds = function(fundsArray, callback) {
   var cur = db.collection('stocks').find(query).sort({"funds.name": 1});
   cur.toArray(function(err, results) {
     if (err) throw err;
-    console.log("Total stocks:", results.length);
     results = filterFunds(results);
     results = sortStocks(results);
     callback(results);
@@ -29,13 +28,11 @@ module.exports.findStocksForFunds = function(fundsArray, callback) {
 
   function filterFunds(stocksArray) {
     return _.map(stocksArray, function(stock) {
-      console.log("Total funds for stock: ", stock.name, ": ", stock.funds.length);
       stock.funds = _.map(stock.funds, function(fundObj) {
         if (_.contains(fundsArray, fundObj.name)) {
           stock[fundObj.name] = fundObj.percentage;
         }
       });
-      console.log("Funds for stock:", JSON.stringify(stock));
       return stock;
     });
   }

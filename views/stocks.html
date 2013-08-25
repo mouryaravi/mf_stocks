@@ -1,14 +1,31 @@
 html
-  title MF Stock Consolidator
+  head
+    title MF Stock Consolidator
+    link(href="/bootstrap.min.css", rel="stylesheet")
   body
-    div(class="container")
-      table(name="stocksTable")
+    div(class="main")
+      table(name="stocksTable", class="table table-striped table-bordered table-condensed")
         tr
+          th S.I. No
           th Stock
           - for (var fund in selectedFunds)
             th= selectedFunds[fund]
+          th Total %
+        - var totalFundPerc = {};
         - for (var idx = 0; idx < stocks.length; idx++)
           tr
+            - var totalStockPerc = 0.0;
+            td= idx+1
             td= stocks[idx].name
             - for (var idx2 = 0; idx2 < selectedFunds.length; idx2++)
-              td= stocks[idx][selectedFunds[idx2]]
+              - var thisFund = selectedFunds[idx2];
+              - var thisFundPerc = stocks[idx][thisFund]
+              td= thisFundPerc
+              - totalStockPerc += (parseFloat(thisFundPerc) || 0.0);
+              - totalFundPerc[thisFund]  = (totalFundPerc[thisFund] || 0.0) + (parseFloat(thisFundPerc) || 0.0)
+            td= totalStockPerc.toPrecision(4)
+        tr
+          th
+          th Total
+          - for (var fund in selectedFunds)
+            th= totalFundPerc[selectedFunds[fund]].toPrecision(4)

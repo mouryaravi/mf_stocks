@@ -1,10 +1,18 @@
 html
-  title MF Stock consolidator
+  head
+    title MF Stock consolidator
+    link(href="/bootstrap.min.css", rel="stylesheet")
   body
     div(class="container")
-      form(action="/stocks", method="get")
-        - for (var idx = 0; idx < funds.length; idx++)
-          input(type="checkbox", name="fund", value= funds[idx])
-          = funds[idx]
-          br
-        input(type="Submit", value="Get stocks")
+      div(class="control-group")
+        p(class="pull-left") Select Funds
+        div(class="controls span2")      
+          form(action="/stocks", method="get")
+            - for (var idx = 0; idx < funds.length; idx++)
+              label(class="checkbox")
+                input(type="checkbox", name="fund", class="checkbox", value= funds[idx])
+                = funds[idx]
+            input(type="button", value="Clear", class="btn")
+            input(type="button", value="Select All", class="btn")
+            br
+            input(type="Submit", value="Get stocks", class="btn-primary")
